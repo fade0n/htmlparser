@@ -14,8 +14,8 @@ namespace html_parser
            
             SqlConnectionStringBuilder Connect = new SqlConnectionStringBuilder
             {
-                DataSource = "A1CAIDA",
-                InitialCatalog = "a1caida",
+                DataSource = "",
+                InitialCatalog = "",
                 IntegratedSecurity = true
 
             };
