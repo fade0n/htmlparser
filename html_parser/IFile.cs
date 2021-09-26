@@ -18,7 +18,7 @@ namespace html_parser
         public string Clean(string text)
         {
             text = Regex.Replace(text, @"<[^>]*>", " ");// удаление хтмл тегов
-            text = Regex.Replace(text, @"[&.+;]", " ");//  спецсимволов хтмл"
+            text = Regex.Replace(text, @"[&.+;]", " ");//  спецсимволов хтмл
             text = Regex.Replace(text, @"[._^%$#!~@,;:]\s", " ");// знаков препинания
             text = Regex.Replace(text, @"[()]", " ");// скобок
             text = Regex.Replace(text, @"\s-\s", " ");// тире
@@ -31,42 +31,52 @@ namespace html_parser
         {
             Dictionary<string, int> list = new Dictionary<string, int>();
             int script = 0;
-            foreach (string line in File.ReadLines(text))
+            try
             {
-                string temp; 
-                
-                if (line.Contains("</script>")|| line.Contains("</style>"))
+                foreach (string line in File.ReadLines(text))
                 {
-                    script = 0;
-                }
-                else if ((line.Contains("<script>")) ||((line.Contains("<style>")) || script > 0))
-                {
-                    script++;
-                }
-                else
-                {
-                    temp = line.ToUpperInvariant();
-                    temp = Clean(temp);
-                    string[] words = temp.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string word in words)
+                    string temp;
+
+                    if (line.Contains("</script>") || line.Contains("</style>"))//пропуск <script> и <style>
                     {
-                        if (!list.ContainsKey(word))
+                        script = 0;
+                    }
+                    else if ((line.Contains("<script>")) || ((line.Contains("<style>")) || script > 0))
+                    {
+                        script++;
+                    }
+                    else
+                    {
+                        temp = line.ToUpperInvariant();
+                        temp = Clean(temp);
+                        string[] words = temp.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string word in words)
                         {
-                            list.Add(word, 1);
-                        }
-                        else
-                        {
-                            list[word] += 1;
+                            if (!list.ContainsKey(word))
+                            {
+                                list.Add(word, 1);
+                            }
+                            else
+                            {
+                                list[word] += 1;
+                            }
                         }
                     }
+
+
                 }
 
-               
+                list = list.OrderByDescending(x => x.Value).ToDictionary(z => z.Key, y => y.Value);
+
+                return list;
+            }
+            catch(Exception Ex)
+            {
+                Console.WriteLine(Ex.Message);
+                Environment.Exit(-1);
+                return list;
             }
 
-            list = list.OrderByDescending(x => x.Value).ToDictionary(z => z.Key, y => y.Value);
-
-            return list;
         }
         public void Show(dynamic words)
         {

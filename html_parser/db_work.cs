@@ -14,13 +14,13 @@ namespace html_parser
            
             SqlConnectionStringBuilder Connect = new SqlConnectionStringBuilder
             {
-                DataSource = "A1CAIDA",
-                InitialCatalog = "a1caida",
+                DataSource = "A1CAIDA",//пользователь 
+                InitialCatalog = "a1caida",//бд
                 IntegratedSecurity = true
 
             };
             Connection = new SqlConnection(Connect.ConnectionString);
-            //Connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["db"].ConnectionString);
+          
         }
         public void insert(Dictionary<string, int> words)
         {
@@ -39,7 +39,7 @@ namespace html_parser
 
                 if (count == 0)
                 {
-                    command.CommandText = $"INSERT INTO [dbo].[word_statistics] VALUES ('{word.Key}', {word.Value})";
+                    command.CommandText = $"INSERT INTO [dbo].[word_statistics] VALUES ('{word.Key}', {word.Value})";//вставка при отсутствии слова
                     
                     try
                     {
@@ -60,7 +60,7 @@ namespace html_parser
                 }
                 else
                 {
-                    command.CommandText = $"UPDATE [dbo].[word_statistics] SET count= count + {word.Value} WHERE word = '{word.Key}'";
+                    command.CommandText = $"UPDATE [dbo].[word_statistics] SET count= count + {word.Value} WHERE word = '{word.Key}'";//вставка существующего слова
                     try
                     {
                         Connection.Open();
