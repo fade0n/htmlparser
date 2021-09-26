@@ -35,7 +35,7 @@ namespace html_parser
             {
                 string temp; 
                 
-                if (line.Contains("</script>")|| line.Contains("</style>"))
+                if (line.Contains("</script>")|| line.Contains("</style>"))// пропуск тегов
                 {
                     script = 0;
                 }
